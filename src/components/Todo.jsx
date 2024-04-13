@@ -1,27 +1,38 @@
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { FaArrowAltCircleRight } from "react-icons/fa";
-import { addTodo, updateSearchTodo } from "../Redux/Action/actions";
 import { BsSearch } from "react-icons/bs";
+import { addTodo, updateSearchTodo } from "../Redux/Action/actions";
 import FilterButton from "./FilterButton";
 import List from "./List";
+
 const Todo = () => {
   const dispatch = useDispatch();
   const [todoText, setTodoText] = useState("");
   const [searchText, setSearchText] = useState("");
+
   const handleAddTodo = (text) => {
     dispatch(addTodo(text));
-  }
+  };
+
   const saveTodo = () => {
-    if (todoText.trim() !== ""){
+    if (todoText.trim() !== "") {
       handleAddTodo(todoText.trim());
       setTodoText("");
     }
-  }
+  };
+
   const handleSearchTodo = (value) => {
-    setSearchText(value)
-    dispatch(updateSearchTodo(value))
-  }
+    setSearchText(value);
+    dispatch(updateSearchTodo(value));
+  };
+
+  const handleKeyPress = (e) => {
+    if (e.key === "Enter") {
+      saveTodo();
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto sm:mt-8 p-4 bg-gray-200 rounded">
       <h2 className="mt-3 mb-6 text-2xl font-bold text-center text-teal-700 uppercase">
@@ -35,7 +46,9 @@ const Todo = () => {
           className="flex-grow p-2 border-b-2 border-gray-300 rounded focus:outline-none focus:border-gray-800 ease-in-out duration-300"
           name="text"
           id="addTodo"
+          value={todoText}
           onChange={(e) => setTodoText(e.target.value)}
+          onKeyPress={handleKeyPress}
         />
         <button
           className="ml-4 p-2 bg-gray-500 text-white rounded hover:bg-gray-800 focus:outline-none"
@@ -69,6 +82,6 @@ const Todo = () => {
       <List />
     </div>
   );
-}
+};
 
 export default Todo;
