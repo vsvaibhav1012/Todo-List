@@ -13,13 +13,13 @@ const FilterButton = () => {
       <select 
         value={currentFilter}
         onChange={(e) => handleFilter(e.target.value)}
-        className="text-sm px-2 py-1 border-blue-300 focus:outline-none"
+        className="text-sm px-2 py-1 border-gray-300 focus:outline-none"
         >
-        <option value='ALL'>Default</option>
+        <option value='ALL'>All</option>
         <option value='COMPLETED'>Completed</option>
         <option value='INCOMPLETE'>Incomplete</option>
         </select>
-        <button onClick={() => dispatch(markAllCompleted())} className="text-sm px-2 py-1 bg-blue-700 text-white ml-2 rounded">Mark All Completed</button>
+        <button onClick={() => dispatch(markAllCompleted())} className="text-sm px-2 py-1 bg-gray-700 text-white ml-2 rounded">Mark All As Completed</button>
     </div>
   );
 }
