@@ -5,7 +5,7 @@ import { toast } from "sonner";
 import { useCreateTodoMutation } from "@/store/api/todosApi";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Plus, Loader2, ChevronDown, ChevronUp } from "lucide-react";
+import { Plus, Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import type { Priority } from "@/types";
 
@@ -34,7 +34,6 @@ export function TodoCreateForm() {
   const [title, setTitle] = useState("");
   const [priority, setPriority] = useState<Priority>("MEDIUM");
   const [dueDate, setDueDate] = useState("");
-  const [expanded, setExpanded] = useState(false);
   const [create, { isLoading }] = useCreateTodoMutation();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -70,23 +69,13 @@ export function TodoCreateForm() {
           aria-label="New todo title"
           className="flex-1"
         />
-        <Button
-          type="button"
-          variant="ghost"
-          size="icon"
-          onClick={() => setExpanded((v) => !v)}
-          aria-label={expanded ? "Hide options" : "Show priority and due date"}
-          className="text-muted-foreground"
-        >
-          {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
         <Button type="submit" disabled={isLoading || !title.trim()} size="icon" aria-label="Add todo">
           {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Plus className="h-4 w-4" />}
         </Button>
       </div>
 
-      {/* Priority + due date — always visible on wider screens, collapsible on mobile */}
-      <div className={cn("flex flex-wrap items-center gap-3", !expanded && "hidden sm:flex")}>
+      {/* Priority + due date — always visible */}
+      <div className="flex flex-wrap items-center gap-3">
         {/* Priority pills */}
         <div className="flex items-center gap-1.5">
           <span className="text-xs text-muted-foreground font-medium">Priority:</span>
@@ -108,14 +97,16 @@ export function TodoCreateForm() {
 
         {/* Due date */}
         <div className="flex items-center gap-1.5">
-          <span className="text-xs text-muted-foreground font-medium">Due:</span>
+          <span className="text-xs text-muted-foreground font-medium">
+            Due date <span className="font-normal opacity-60">(optional)</span>
+          </span>
           <input
             type="date"
             value={dueDate}
             onChange={(e) => setDueDate(e.target.value)}
             min={new Date().toISOString().split("T")[0]}
             className="text-xs border rounded-md px-2 py-1 bg-background text-foreground focus:outline-none focus:ring-2 focus:ring-ring"
-            aria-label="Due date"
+            aria-label="Due date (optional)"
           />
           {dueDate && (
             <button
