@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useRegisterMutation } from "@/store/api/authApi";
+import { useAuth } from "@/hooks/useAuth";
 import { registerSchema } from "@/validation/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -44,9 +45,16 @@ function PasswordStrength({ password }: { password: string }) {
 export function RegisterForm() {
   const router = useRouter();
   const [register, { isLoading }] = useRegisterMutation();
+  const { isAuthenticated } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "", displayName: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace("/todos");
+    }
+  }, [isAuthenticated, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -65,7 +73,7 @@ export function RegisterForm() {
     try {
       await register(parsed.data).unwrap();
       toast.success("Account created! Welcome!");
-      router.push("/todos");
+      router.replace("/todos");
     } catch (err: unknown) {
       const msg = (err as { data?: { error?: { message?: string } } })?.data?.error?.message ?? "Registration failed.";
       toast.error(msg);

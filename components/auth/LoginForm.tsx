@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { toast } from "sonner";
 import { useLoginMutation } from "@/store/api/authApi";
+import { useAuth } from "@/hooks/useAuth";
 import { loginSchema } from "@/validation/auth";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -17,9 +18,18 @@ export function LoginForm() {
   const from = searchParams.get("from") ?? "/todos";
 
   const [login, { isLoading }] = useLoginMutation();
+  const { isAuthenticated } = useAuth();
   const [showPassword, setShowPassword] = useState(false);
   const [form, setForm] = useState({ email: "", password: "" });
   const [errors, setErrors] = useState<Record<string, string>>({});
+
+  // Belt-and-suspenders: redirect whenever auth state flips to authenticated.
+  // This fires both on login success AND on page load if already authenticated.
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.replace(from);
+    }
+  }, [isAuthenticated, from, router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -38,7 +48,9 @@ export function LoginForm() {
     try {
       await login(parsed.data).unwrap();
       toast.success("Welcome back!");
-      router.push(from);
+      // router.replace is also called by the useEffect above, but call it here
+      // immediately so navigation starts before the effect re-render cycle.
+      router.replace(from);
     } catch (err: unknown) {
       const msg = (err as { data?: { error?: { message?: string } } })?.data?.error?.message ?? "Login failed.";
       toast.error(msg);
