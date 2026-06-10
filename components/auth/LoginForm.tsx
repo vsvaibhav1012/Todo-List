@@ -47,11 +47,22 @@ export function LoginForm() {
 
   return (
     <div className="w-full max-w-sm space-y-6">
-      <div className="text-center">
-        <h1 className="text-2xl font-bold tracking-tight">Sign in</h1>
-        <p className="text-sm text-muted-foreground mt-1">
+      <div className="text-center space-y-2">
+        <div className="flex items-center justify-center gap-2.5 mb-4">
+          <div className="h-9 w-9 rounded-xl bg-gradient-to-br from-indigo-500 to-violet-500 flex items-center justify-center shadow-md">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2.8" strokeLinecap="round" strokeLinejoin="round">
+              <polyline points="9 11 12 14 22 4" />
+              <path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11" />
+            </svg>
+          </div>
+          <span className="font-bold text-2xl tracking-tight bg-gradient-to-r from-indigo-600 to-violet-600 bg-clip-text text-transparent">
+            Taska
+          </span>
+        </div>
+        <h1 className="text-xl font-semibold tracking-tight">Welcome back</h1>
+        <p className="text-sm text-muted-foreground">
           Don&apos;t have an account?{" "}
-          <Link href="/register" className="underline underline-offset-4 hover:text-primary">
+          <Link href="/register" className="underline underline-offset-4 hover:text-primary font-medium">
             Register
           </Link>
         </p>

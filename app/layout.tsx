@@ -6,8 +6,12 @@ import { Providers } from "@/components/Providers";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Todo App",
-  description: "Personal todo list with authentication",
+  title: {
+    default: "Taska — Your Personal Todo List",
+    template: "%s | Taska",
+  },
+  description: "A fast, private todo app with real-time sync and secure authentication.",
+  icons: { icon: "/icon" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
