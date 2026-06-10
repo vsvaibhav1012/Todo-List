@@ -1,17 +1,17 @@
 import { NextRequest, NextResponse } from "next/server";
-import { verifyAccessToken } from "@/lib/auth";
+import { verifyAccessTokenEdge } from "@/lib/authEdge";
 
 const PROTECTED = ["/todos", "/profile"];
-const AUTH_ONLY = ["/login", "/register"]; // redirect away if already authed
+const AUTH_ONLY = ["/login", "/register"];
 
-export function middleware(req: NextRequest) {
+export async function middleware(req: NextRequest) {
   const { pathname } = req.nextUrl;
   const accessToken = req.cookies.get("access_token")?.value;
 
   let isAuthed = false;
   if (accessToken) {
     try {
-      verifyAccessToken(accessToken);
+      await verifyAccessTokenEdge(accessToken);
       isAuthed = true;
     } catch {
       isAuthed = false;
